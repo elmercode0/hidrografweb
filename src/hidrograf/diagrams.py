@@ -132,6 +132,13 @@ def plot_piper(samples: SampleSet, labels: bool = False, title: str | None = Non
     ax.text(_DIA_CX + 0.25 + off * _H, _DIA_CY + _H / 2 + off * 0.5, _L_HCO3,
             ha="center", va="center", rotation=-60, **tk)
 
+    # Legendas de eixo internas (cinza, rotacionadas) — guia de leitura como na referência:
+    # o cátion Mg cresce ao longo do lado direito do triângulo de cátions e o ânion SO4 ao
+    # longo do lado direito do triângulo de ânions.
+    gk = {"fontsize": 11, "color": "0.55", "zorder": 3, "ha": "center", "va": "center"}
+    ax.text(0.685, 0.40, _L_MG, rotation=-60, **gk)
+    ax.text(_ANION_X0 + 0.685, 0.40, _L_SO4, rotation=-60, **gk)
+
     colors = _sample_colors(len(samples))
     handles, plotted = [], []
     for i, s in enumerate(samples):
@@ -168,8 +175,19 @@ def plot_piper(samples: SampleSet, labels: bool = False, title: str | None = Non
                                       markeredgewidth=1.0, label=str(s.label)))
 
     if labels:
-        _label_points(ax, [p[0][0] for p in plotted], [p[0][1] for p in plotted],
-                      [p[1] for p in plotted])
+        # Rótulo de cada amostra no ponto do losango, empurrado para fora do centro + fundo
+        # branco. O ângulo base é radial (para fora do losango) com um leque por índice, que
+        # separa os rótulos de pontos quase coincidentes (ex.: amostras de química parecida).
+        n = len(plotted)
+        for i, (dp, lab) in enumerate(plotted):
+            base = math.atan2(dp[1] - _DIA_CY, dp[0] - _DIA_CX)
+            ang = base + math.radians((i - (n - 1) / 2.0) * 18.0)
+            ox, oy = 13.0 * math.cos(ang), 13.0 * math.sin(ang)
+            ax.annotate(str(lab), (dp[0], dp[1]), fontsize=8, fontweight="bold",
+                        xytext=(ox, oy), textcoords="offset points",
+                        ha="center", va="center", zorder=7,
+                        bbox=dict(boxstyle="round,pad=0.12", fc="white",
+                                  ec="none", alpha=0.7))
     if handles and len(handles) <= 14:
         ax.legend(handles=handles, title="Amostras", loc="upper right",
                   bbox_to_anchor=(1.0, 1.0), frameon=True, fontsize=11,
