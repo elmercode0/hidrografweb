@@ -38,9 +38,13 @@ samples — dropped/invalid samples are reported.
 - Language: Python ≥ 3.11.
 - Core numeric stack: `numpy`, `pandas` for tabular I/O, `matplotlib` for diagrams.
 - CLI: `typer`. Packaging: `pyproject.toml` (PEP 621), `src/` layout.
-- No network access required at runtime. Offline-capable by design (matches the original
-  QualiGraf, a desktop tool).
-- Inputs: CSV/XLSX of water samples; concentrations in mg/L (convertible to meq/L).
+- The library core requires no network at runtime (offline-capable, like the original).
+- **Web delivery (added v1.1.0):** a thin Streamlit UI (`streamlit_app.py`) is a supported
+  delivery target, deployed on Streamlit Community Cloud. It MUST only import `qualigraf`
+  and contain no calculation logic (Principle I). Earlier "GUI/web out of scope" is
+  superseded; see `specs/002-web-delivery/`.
+- Inputs: CSV/XLSX of water samples; ion concentrations in mg/L **or** meq/L (unit
+  detected from the header or supplied by the user), CE in µS/cm.
 
 ## Development Workflow
 
@@ -49,11 +53,22 @@ samples — dropped/invalid samples are reported.
 - `pytest` gate: all value-pinning tests green before a story is marked done.
 - Formatting/linting via `ruff`; type hints on all public functions.
 
+### VI. Spec-First Delivery (added v1.1.0)
+
+- Every new feature starts with spec → plan → tasks BEFORE code. Reverse-documenting
+  (`converge`) is a remediation, not the norm.
+- **Nothing reaches production without a PR.** `main` is the production branch (auto-deploys
+  to Streamlit Cloud); changes land only via feature branch → PR → merge. No direct pushes.
+- Quality gate on every PR: `pytest` green + `ruff` clean; user-facing changes exercised
+  (app boots / flow driven) before merge.
+
 ## Governance
 
 This constitution guides all spec, plan, task, and implementation decisions for
-QualiGraf-Py. Any deviation (extra dependency, skipped test, magic constant) must be
-justified in the plan's Complexity Tracking table. Simplicity and scientific fidelity
-win ties.
+QualiGraf-Py. Any deviation (extra dependency, skipped test, magic constant, out-of-flow
+change) must be justified in the plan's Complexity Tracking table. Simplicity and
+scientific fidelity win ties.
 
-**Version**: 1.0.0 | **Ratified**: 2026-09-04 | **Last Amended**: 2026-09-04
+**Version**: 1.1.0 | **Ratified**: 2026-09-04 | **Last Amended**: 2026-09-04
+<!-- v1.1.0: web/UI moved into scope; added Principle VI (spec-first delivery + PR gate). -->
+
