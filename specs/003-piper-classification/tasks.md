@@ -28,7 +28,7 @@ antes da aprovação desta spec. Todas as tasks abaixo estão pendentes `[ ]`.
 ## Phase 3: Distribuição + exposição (US3)
 
 - [ ] T308 [US3] `piper.field_distribution(samples)` — contagem e % por campo.
-- [ ] T309 [US3] CLI `qualigraf piper FILE [--unit] [--json] [-o]` (tabela + JSON).
+- [ ] T309 [US3] CLI `hidrograf piper FILE [--unit] [--json] [-o]` (tabela + JSON).
 - [ ] T310 [US3] `plot_piper(..., zones=True)` desenha as linhas dos campos.
 - [ ] T311 [US3] App: tabela de classificação na aba Diagramas + checkbox "mostrar zonas".
 - [ ] T312 [P] [US3] `tests/test_piper.py` — distribuição por campos; smoke da CLI `piper`.

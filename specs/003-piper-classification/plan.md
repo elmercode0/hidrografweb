@@ -16,7 +16,7 @@ distribuição por campos, expostas na biblioteca, CLI e app. Depende de `geomet
 **Testing**: pytest — testes de geometria (vértices/dentro do losango) e de classificação
 (águas-teste sintéticas com tipo conhecido)
 **Project Type**: library + CLI + web (specs 001/002)
-**Constraints**: cálculo puro em `qualigraf.*` (Princípio I); constantes nomeadas com fonte
+**Constraints**: cálculo puro em `hidrograf.*` (Princípio I); constantes nomeadas com fonte
 (Princípio IV)
 
 ## Constitution Check
@@ -52,17 +52,17 @@ distribuição por campos, expostas na biblioteca, CLI e app. Depende de `geomet
 - `diagrams.plot_piper(..., zones=False)`: desenhar as linhas dos campos quando `zones`.
 
 ### 4. Superfícies de exposição (FR-305)
-- CLI: `qualigraf piper FILE [--unit] [--json] [-o]`.
+- CLI: `hidrograf piper FILE [--unit] [--json] [-o]`.
 - App: tabela de classificação na aba Diagramas + checkbox "mostrar zonas".
 
 ## Project Structure
 
 ```text
-src/qualigraf/geometry.py   # + piper_diamond_xy()
-src/qualigraf/piper.py      # NOVO: classify_sample, field_distribution
-src/qualigraf/models.py     # + PiperClassification
-src/qualigraf/diagrams.py   # plot_piper: projeção correta + zones
-src/qualigraf/cli.py        # + comando `piper`
+src/hidrograf/geometry.py   # + piper_diamond_xy()
+src/hidrograf/piper.py      # NOVO: classify_sample, field_distribution
+src/hidrograf/models.py     # + PiperClassification
+src/hidrograf/diagrams.py   # plot_piper: projeção correta + zones
+src/hidrograf/cli.py        # + comando `piper`
 streamlit_app.py            # tabela de classificação + zonas
 tests/test_geometry.py      # + vértices/dentro do losango
 tests/test_piper.py         # NOVO: águas-teste, facies, tipo, distribuição

@@ -52,7 +52,7 @@ alcalina-carbonatada / não-carbonatada / mista).
 
 **Why this priority**: é a informação interpretativa central do Piper que o QualiGraf mostra.
 
-**Independent Test**: `qualigraf piper amostras.csv` → tabela com facies e tipo; conferir
+**Independent Test**: `hidrograf piper amostras.csv` → tabela com facies e tipo; conferir
 uma água Ca-HCO₃ conhecida.
 
 **Acceptance Scenarios**:
@@ -70,7 +70,7 @@ uma água Ca-HCO₃ conhecida.
 O usuário vê a **distribuição percentual** das amostras nos campos do losango (tabela) e
 pode sobrepor as **linhas das zonas** de classificação no diagrama.
 
-**Independent Test**: `qualigraf piper amostras.csv --json` traz a contagem/percentual por
+**Independent Test**: `hidrograf piper amostras.csv --json` traz a contagem/percentual por
 campo; `plot piper --zones` desenha as divisões.
 
 **Acceptance Scenarios**:
@@ -95,7 +95,7 @@ campo; `plot piper --zones` desenha as divisões.
 - **FR-303**: A dominância DEVE usar limiar de 50% (meq) por padrão, com regra de
   desempate documentada; limiares configuráveis (constantes nomeadas).
 - **FR-304**: O sistema DEVE calcular a distribuição (contagem e %) das amostras por campo.
-- **FR-305**: A classificação DEVE ser exposta na CLI (`qualigraf piper`, tabela + `--json`)
+- **FR-305**: A classificação DEVE ser exposta na CLI (`hidrograf piper`, tabela + `--json`)
   e no app (tabela na aba de Diagramas).
 - **FR-306**: `plot piper` DEVE oferecer sobreposição opcional das zonas de classificação
   (`--zones`).
@@ -111,7 +111,7 @@ campo; `plot piper --zones` desenha as divisões.
 - **SC-301**: Águas-teste (Ca-HCO₃, Na-Cl, Ca-Cl, Na-HCO₃) caem no campo correto do
   losango e recebem o tipo esperado (100% dos casos de referência).
 - **SC-302**: Todo ponto projetado fica dentro do losango.
-- **SC-303**: `qualigraf piper` roda em uma planilha de exemplo e retorna facies+tipo por
+- **SC-303**: `hidrograf piper` roda em uma planilha de exemplo e retorna facies+tipo por
   amostra + distribuição por campos.
 
 ## Assumptions
