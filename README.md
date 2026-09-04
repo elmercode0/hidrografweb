@@ -63,7 +63,9 @@ Todas as dúvidas da auditoria foram resolvidas com fontes autoritativas — ver
 - Alguns coeficientes das equações CETESB vêm de OCR (conferir antes de usá-las no lugar
   das curvas digitalizadas). Validação ampla exigiria rodar o QualiGraf (Windows) — as
   curvas + equações CETESB tornam isso opcional.
-- **Unidades**: íons em mg/L, CE em µS/cm; sem conversão automática em v1.
+- **Unidades**: íons em **mg/L ou meq/L** — detectadas pelo cabeçalho (`Na (meq/L)`) ou
+  informadas (`--unit` na CLI / seletor no app); normalizadas para mg/L internamente. CE
+  sempre em µS/cm.
 - Fora do escopo: GUI desktop, Google Maps/editores, impressão direta ("Miscelânea").
 - Reproduz os cálculos e a semântica dos módulos, não o layout visual pixel-a-pixel.
 

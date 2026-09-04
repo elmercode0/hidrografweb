@@ -13,10 +13,13 @@ uv pip install -e ".[dev]"                 # ou: pip install -e ".[dev]"
 CSV/XLSX com uma amostra por linha. Cabeçalhos reconhecidos por aliases
 (ex.: `Na`, `Sodio`, `Na+`).
 
-> ⚠️ **Unidades obrigatórias (v1):** íons em **mg/L** e CE em **µS/cm**. Não há conversão
-> automática — CE em dS/m ou mS/cm produz STD e classe USSL **1000× errados**. Para o IQA,
-> `OD` deve ser **% de saturação** (não mg/L) e `temp_var` é a **variação** de temperatura.
-> Células não numéricas são rejeitadas com erro citando a amostra (não são descartadas).
+> **Unidades dos íons — mg/L ou meq/L:** detectadas pelo cabeçalho quando indicadas
+> (`Na (meq/L)`, `Cl_mg/L`, `SO4 (epm)`); onde não houver, informe a unidade — na CLI com
+> `--unit mg|meq`, no app com o seletor do upload. Tudo é normalizado para mg/L
+> internamente. **CE sempre em µS/cm** (sem conversão automática de dS/m — daria 1000×
+> errado). Para o IQA, `OD` deve ser **% de saturação** (use `chemistry.do_saturation_pct`
+> se tiver mg/L) e `temp_var` é a **variação** de temperatura. Células não numéricas são
+> rejeitadas com erro citando a amostra.
 
 ```csv
 label,Ca,Mg,Na,K,Cl,SO4,HCO3,CO3,EC,pH,TDS

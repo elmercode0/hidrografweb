@@ -26,7 +26,7 @@ import streamlit as st
 
 from qualigraf.balance import ionic_balance
 from qualigraf.diagrams import plot as make_plot
-from qualigraf.io import DataError, load
+from qualigraf.io import DataError, detect_ion_units, load
 from qualigraf.iqa import water_quality_index
 from qualigraf.irrigation import irrigation_classification
 from qualigraf.models import SampleSet, WaterSample
@@ -38,15 +38,29 @@ EXAMPLE = Path(__file__).parent / "tests" / "data" / "sample_waters.csv"
 st.set_page_config(page_title="QualiGraf-Py", page_icon="💧", layout="wide")
 
 
-@st.cache_data(show_spinner=False)
-def _load_bytes(data: bytes, name: str) -> list[dict]:
-    """Carrega bytes de upload em uma lista de dicts (cacheável)."""
+def _write_temp(data: bytes, name: str) -> str:
     suffix = Path(name).suffix or ".csv"
     with tempfile.NamedTemporaryFile(suffix=suffix, delete=False) as fh:
         fh.write(data)
-        tmp = fh.name
+        return fh.name
+
+
+@st.cache_data(show_spinner=False)
+def _detect_from_bytes(data: bytes, name: str) -> dict:
+    """Unidade detectada por íon nos cabeçalhos: {campo: 'meq'|'mg'|None}."""
+    tmp = _write_temp(data, name)
     try:
-        ss = load(tmp)
+        return detect_ion_units(tmp)
+    finally:
+        os.unlink(tmp)
+
+
+@st.cache_data(show_spinner=False)
+def _load_bytes(data: bytes, name: str, default_unit: str) -> list[dict]:
+    """Carrega bytes de upload em lista de dicts, normalizando íons para mg/L."""
+    tmp = _write_temp(data, name)
+    try:
+        ss = load(tmp, default_unit=default_unit)
         return [s.__dict__ for s in ss]
     finally:
         os.unlink(tmp)
@@ -102,10 +116,29 @@ use_example = st.sidebar.toggle("Usar dados de exemplo", value=up is None)
 samples: SampleSet | None = None
 try:
     if up is not None and not use_example:
-        recs = _load_bytes(up.getvalue(), up.name)
+        detected = _detect_from_bytes(up.getvalue(), up.name)  # {campo: 'meq'|'mg'|None}
+        default_unit = "mg"
+        if detected:  # há colunas de íons → tratar unidade
+            found = {v for v in detected.values() if v}
+            if found == {"meq"}:
+                idx, note = 1, "Unidade **meq/L** detectada no cabeçalho."
+            elif found == {"mg"}:
+                idx, note = 0, "Unidade **mg/L** detectada no cabeçalho."
+            elif found:
+                idx, note = 0, "Unidades mistas no cabeçalho — colunas sem unidade usarão a opção abaixo."
+            else:
+                idx, note = 0, "⚠️ Nenhuma unidade no cabeçalho — **indique** a unidade das concentrações."
+            unit_label = st.sidebar.radio(
+                "Unidade das concentrações de íons",
+                ["mg/L", "meq/L"], index=idx,
+                help="Colunas com unidade no cabeçalho (ex.: 'Na (meq/L)') têm precedência.",
+            )
+            st.sidebar.caption(note)
+            default_unit = "meq" if unit_label == "meq/L" else "mg"
+        recs = _load_bytes(up.getvalue(), up.name, default_unit)
         samples = _to_sampleset(recs)
     elif use_example:
-        samples = load(EXAMPLE)
+        samples = load(EXAMPLE)  # dados de exemplo em mg/L
 except DataError as e:
     st.sidebar.error(f"Erro ao ler a planilha: {e}")
 
@@ -133,6 +166,10 @@ tabs = st.tabs(
 with tabs[0]:
     st.subheader("Amostras")
     st.dataframe(samples.to_dataframe(), use_container_width=True)
+    st.caption(
+        "Concentrações de íons exibidas em **mg/L** (planilhas em meq/L são convertidas "
+        "automaticamente na importação). CE em µS/cm."
+    )
 
 # --- Balanço iônico
 with tabs[1]:

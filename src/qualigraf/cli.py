@@ -19,9 +19,9 @@ def _fail(msg: str, code: int = 1) -> None:
     raise typer.Exit(code)
 
 
-def _load(file: Path):
+def _load(file: Path, unit: str = "mg"):
     try:
-        return load(file)
+        return load(file, default_unit=unit)
     except DataError as e:
         _fail(str(e), 2)
 
@@ -59,6 +59,7 @@ def _emit_rows(rows: list[dict], as_json: bool, output: Path | None) -> None:
 @app.command()
 def balance(
     file: Path,
+    unit: str = typer.Option("mg", help="unidade dos íons sem unidade no cabeçalho: mg | meq"),
     json: bool = typer.Option(False, "--json"),
     output: Path | None = typer.Option(None, "-o", "--output"),
 ):
@@ -68,7 +69,7 @@ def balance(
     """
     from .balance import ionic_balance
 
-    samples = _load(file)
+    samples = _load(file, unit)
     results = ionic_balance(samples)
     rows = [{
         "label": r.label, "ΣCat": r.sum_cations, "ΣAn": r.sum_anions,
@@ -106,13 +107,14 @@ def tds(
 @app.command()
 def sar(
     file: Path,
+    unit: str = typer.Option("mg", help="unidade dos íons sem unidade no cabeçalho: mg | meq"),
     json: bool = typer.Option(False, "--json"),
     output: Path | None = typer.Option(None, "-o", "--output"),
 ):
     """SAR + classificação USSL para irrigação (US3)."""
     from .irrigation import irrigation_classification
 
-    samples = _load(file)
+    samples = _load(file, unit)
     results = irrigation_classification(samples)
     rows = [{"label": r.label, "SAR": r.sar, "C": r.c_class, "S": r.s_class,
              "USSL": r.ussl_label} for r in results]
@@ -190,14 +192,15 @@ def correlate(
 @app.command()
 def convert(
     file: Path,
-    to: str = typer.Option("meq", help="meq | mg"),
+    to: str = typer.Option("meq", help="meq | mg (unidade de saída)"),
+    unit: str = typer.Option("mg", help="unidade de ENTRADA sem unidade no cabeçalho: mg | meq"),
     output: Path | None = typer.Option(None, "-o", "--output"),
 ):
     """Converte as concentrações de íons de uma planilha entre mg/L e meq/L (US1/FR-011)."""
     from .chemistry import to_meq, to_mg
     from .constants import ANIONS, CATIONS
 
-    samples = _load(file)
+    samples = _load(file, unit)
     ions = CATIONS + ANIONS
     rows = []
     for s in samples:
