@@ -21,5 +21,9 @@ env/
 # Streamlit
 .streamlit/secrets.toml
 
+# Tooling local (config de Claude Code / Spec Kit — não vai ao repo público)
+.claude/
+.specify/
+
 # Binários grandes do QualiGraf original (baixáveis do site da FUNCEME; não vão ao repo)
 scrapling/assets/

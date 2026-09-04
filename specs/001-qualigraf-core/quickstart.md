@@ -3,7 +3,7 @@
 ## Instalação (dev)
 
 ```bash
-cd /Users/elmerrodrigues/code/active/hidrografweb
+cd hidrografweb
 uv venv && source .venv/bin/activate      # ou: python3.11 -m venv .venv
 uv pip install -e ".[dev]"                 # ou: pip install -e ".[dev]"
 ```
