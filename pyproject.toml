@@ -1,0 +1,41 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "qualigraf"
+version = "0.1.0"
+description = "Reimplementação em Python dos módulos de análise hidroquímica do QualiGraf (FUNCEME)"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Elmer Rodrigues" }]
+dependencies = [
+    "numpy>=1.26",
+    "pandas>=2.0",
+    "matplotlib>=3.7",
+    "typer>=0.12",
+    "openpyxl>=3.1",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "ruff>=0.5"]
+web = ["streamlit>=1.36"]
+
+[project.scripts]
+qualigraf = "qualigraf.cli:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/qualigraf"]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint.per-file-ignores]
+# typer usa `Option(...)`/`Argument(...)` como defaults de função — idioma da lib.
+"src/qualigraf/cli.py" = ["B008"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

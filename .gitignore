@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+build/
+dist/
+
+# Ambientes virtuais
+.venv/
+venv/
+env/
+
+# Artefatos locais / temporários
+*.png
+!scrapling/**/*.png
+/tmp/
+.DS_Store
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Binários grandes do QualiGraf original (baixáveis do site da FUNCEME; não vão ao repo)
+scrapling/assets/
