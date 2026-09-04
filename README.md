@@ -1,4 +1,4 @@
-# QualiGraf-Py
+# Hidrograf
 
 Reimplementação em Python (biblioteca + CLI) dos módulos de análise hidroquímica do
 **QualiGraf** da [FUNCEME](http://www.funceme.br/). Gerado via fluxo *spec-driven*
@@ -31,9 +31,9 @@ uv pip install -e ".[dev]"
 Veja [`specs/001-qualigraf-core/quickstart.md`](specs/001-qualigraf-core/quickstart.md).
 
 ```bash
-qualigraf balance tests/data/sample_waters.csv --method both
-qualigraf iqa tests/data/sample_waters.csv --json
-qualigraf plot piper tests/data/sample_waters.csv -o piper.png --labels
+hidrograf balance tests/data/sample_waters.csv --method both
+hidrograf iqa tests/data/sample_waters.csv --json
+hidrograf plot piper tests/data/sample_waters.csv -o piper.png --labels
 ```
 
 ## Testes

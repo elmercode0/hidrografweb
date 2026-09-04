@@ -1,4 +1,4 @@
-# Research & Decisions — QualiGraf-Py
+# Research & Decisions — Hidrograf
 
 Fontes primárias: `scrapling/page-3-modulos.md` (descrição dos módulos),
 `scrapling/assets/Tutorial_QualiGraf.pdf` (tutorial), e literatura hidroquímica padrão

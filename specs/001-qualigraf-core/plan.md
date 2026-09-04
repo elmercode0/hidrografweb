@@ -1,4 +1,4 @@
-# Implementation Plan: QualiGraf-Py — Núcleo de Análise Hidroquímica
+# Implementation Plan: Hidrograf — Núcleo de Análise Hidroquímica
 
 **Branch**: `001-qualigraf-core` | **Date**: 2026-09-04 | **Spec**: [spec.md](./spec.md)
 
@@ -6,7 +6,7 @@
 
 ## Summary
 
-Biblioteca Python (`qualigraf`) de cálculos hidroquímicos puros + CLI (`typer`) que lê
+Biblioteca Python (`hidrograf`) de cálculos hidroquímicos puros + CLI (`typer`) que lê
 planilhas de amostras (CSV/XLSX) e produz balanço iônico, STD/CONAMA, SAR/USSL, IQA
 (CETESB+IGAM), estatísticas, correlações e os diagramas de Piper, Stiff, Durov,
 Schoeller-Berkaloff e Radial. Cálculos são funções puras testadas contra valores de
@@ -30,7 +30,7 @@ referência; a CLI oferece saída humana e `--json`.
 
 | Princípio | Conformidade |
 |-----------|--------------|
-| I. Library-First, Domain-Pure | ✅ cálculos em `qualigraf/*` sem I/O; CLI separada |
+| I. Library-First, Domain-Pure | ✅ cálculos em `hidrograf/*` sem I/O; CLI separada |
 | II. CLI Interface | ✅ toda análise na CLI com tabela + `--json` |
 | III. Test-First numérico | ✅ tasks de teste de valor-fixado precedem/acompanham cada módulo |
 | IV. Traceabilidade científica | ✅ constantes nomeadas + fontes em `constants.py`/docstrings (ver research.md) |
@@ -59,7 +59,7 @@ specs/001-qualigraf-core/
 ```text
 pyproject.toml
 src/
-└── qualigraf/
+└── hidrograf/
     ├── __init__.py
     ├── constants.py        # pesos equiv., fatores, pesos IQA, limiares de classes
     ├── models.py           # WaterSample, SampleSet, *Result (dataclasses)

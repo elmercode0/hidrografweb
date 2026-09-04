@@ -1,5 +1,5 @@
 # Dependências para o app Streamlit (Streamlit Community Cloud lê este arquivo).
-# A biblioteca `qualigraf` é importada de src/ (ver streamlit_app.py), não precisa ser
+# A biblioteca `hidrograf` é importada de src/ (ver streamlit_app.py), não precisa ser
 # instalada como pacote — mas suas dependências de runtime são listadas aqui.
 streamlit>=1.36
 numpy>=1.26

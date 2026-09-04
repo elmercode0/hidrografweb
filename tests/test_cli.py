@@ -2,7 +2,7 @@ import json
 
 from typer.testing import CliRunner
 
-from qualigraf.cli import app
+from hidrograf.cli import app
 
 runner = CliRunner()
 _CSV = "tests/data/sample_waters.csv"

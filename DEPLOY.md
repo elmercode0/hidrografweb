@@ -1,6 +1,6 @@
-# Deploy — QualiGraf-Py no Streamlit Community Cloud
+# Deploy — Hidrograf no Streamlit Community Cloud
 
-App web: [`streamlit_app.py`](streamlit_app.py) (UI fina sobre a biblioteca `qualigraf`).
+App web: [`streamlit_app.py`](streamlit_app.py) (UI fina sobre a biblioteca `hidrograf`).
 
 ## Rodar localmente
 
@@ -20,9 +20,9 @@ Pré-requisito: o código precisa estar num repositório **GitHub** (público ou
    ```bash
    git init
    git add .
-   git commit -m "QualiGraf-Py: biblioteca, CLI e app Streamlit"
+   git commit -m "Hidrograf: biblioteca, CLI e app Streamlit"
    git branch -M main
-   git remote add origin https://github.com/<voce>/qualigrafweb.git
+   git remote add origin https://github.com/<voce>/hidrografweb.git
    git push -u origin main
    ```
 
@@ -30,7 +30,7 @@ Pré-requisito: o código precisa estar num repositório **GitHub** (público ou
    - Acesse **https://share.streamlit.io** e entre com o GitHub.
    - **Create app → Deploy a public app from GitHub**.
    - Preencha:
-     - **Repository:** `<voce>/qualigrafweb`
+     - **Repository:** `<voce>/hidrografweb`
      - **Branch:** `main`
      - **Main file path:** `streamlit_app.py`
    - **Deploy**. Em ~1–2 min o app fica no ar numa URL pública
@@ -41,7 +41,7 @@ Pré-requisito: o código precisa estar num repositório **GitHub** (público ou
 ## Como o deploy funciona aqui
 
 - O Streamlit Cloud instala as dependências de [`requirements.txt`](requirements.txt).
-- A biblioteca `qualigraf` é importada de `src/` (o `streamlit_app.py` adiciona `src` ao
+- A biblioteca `hidrograf` é importada de `src/` (o `streamlit_app.py` adiciona `src` ao
   `sys.path`) — não precisa publicá-la em PyPI.
 - `matplotlib` roda com backend `Agg` (headless), definido no app.
 - Configuração de tema/servidor em [`.streamlit/config.toml`](.streamlit/config.toml).

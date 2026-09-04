@@ -1,4 +1,4 @@
-# Contribuindo — QualiGraf-Py
+# Contribuindo — Hidrograf
 
 Este projeto segue **desenvolvimento spec-driven** (spec-kit) com **gate de produção por
 PR**. Regras da constituição (`.specify/memory/constitution.md`, Princípio VI).

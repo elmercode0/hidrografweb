@@ -1,5 +1,5 @@
-from qualigraf.irrigation import sar_sample, sar_value
-from qualigraf.models import WaterSample
+from hidrograf.irrigation import sar_sample, sar_value
+from hidrograf.models import WaterSample
 
 
 def test_sar_hand_computed():

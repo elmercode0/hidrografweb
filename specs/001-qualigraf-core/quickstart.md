@@ -1,9 +1,9 @@
-# Quickstart — QualiGraf-Py
+# Quickstart — Hidrograf
 
 ## Instalação (dev)
 
 ```bash
-cd /Users/elmerrodrigues/code/active/qualigrafweb
+cd /Users/elmerrodrigues/code/active/hidrografweb
 uv venv && source .venv/bin/activate      # ou: python3.11 -m venv .venv
 uv pip install -e ".[dev]"                 # ou: pip install -e ".[dev]"
 ```
@@ -30,21 +30,21 @@ P2,80,30,120,8,180,90,200,0,1800,7.8,
 ## Uso rápido
 
 ```bash
-qualigraf balance tests/data/sample_waters.csv          # tabela no terminal
-qualigraf tds tests/data/sample_waters.csv --json       # JSON
-qualigraf sar tests/data/sample_waters.csv
-qualigraf iqa tests/data/sample_waters.csv
-qualigraf stats tests/data/sample_waters.csv
-qualigraf correlate tests/data/sample_waters.csv --x Cl --y Na
-qualigraf plot piper tests/data/sample_waters.csv -o piper.png --labels
+hidrograf balance tests/data/sample_waters.csv          # tabela no terminal
+hidrograf tds tests/data/sample_waters.csv --json       # JSON
+hidrograf sar tests/data/sample_waters.csv
+hidrograf iqa tests/data/sample_waters.csv
+hidrograf stats tests/data/sample_waters.csv
+hidrograf correlate tests/data/sample_waters.csv --x Cl --y Na
+hidrograf plot piper tests/data/sample_waters.csv -o piper.png --labels
 ```
 
 ## Uso como biblioteca
 
 ```python
-from qualigraf.io import load
-from qualigraf.balance import ionic_balance
-from qualigraf.diagrams import plot_piper
+from hidrograf.io import load
+from hidrograf.balance import ionic_balance
+from hidrograf.diagrams import plot_piper
 
 samples = load("tests/data/sample_waters.csv")
 for r in ionic_balance(samples, method="both"):

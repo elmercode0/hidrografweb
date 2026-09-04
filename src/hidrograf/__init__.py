@@ -1,4 +1,4 @@
-"""QualiGraf-Py — núcleo de análise hidroquímica (reimplementação do QualiGraf/FUNCEME)."""
+"""Hidrograf — núcleo de análise hidroquímica (reimplementação do QualiGraf/FUNCEME)."""
 
 from .balance import ionic_balance
 from .io import load

@@ -4,8 +4,8 @@ matplotlib.use("Agg")
 
 import pytest
 
-from qualigraf.diagrams import plot
-from qualigraf.io import load
+from hidrograf.diagrams import plot
+from hidrograf.io import load
 
 _CSV = "tests/data/sample_waters.csv"
 

@@ -1,6 +1,6 @@
 import pytest
 
-from qualigraf.io import DataError, detect_ion_units, load
+from hidrograf.io import DataError, detect_ion_units, load
 
 
 def test_load_ok():

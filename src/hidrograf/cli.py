@@ -1,4 +1,4 @@
-"""CLI do QualiGraf-Py (typer). Toda análise: saída humana (tabela) ou --json."""
+"""CLI do Hidrograf (typer). Toda análise: saída humana (tabela) ou --json."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ import typer
 
 from .io import DataError, load
 
-app = typer.Typer(add_completion=False, help="QualiGraf-Py — análise hidroquímica (FUNCEME).")
+app = typer.Typer(add_completion=False, help="Hidrograf — análise hidroquímica (FUNCEME).")
 plot_app = typer.Typer(help="Diagramas: piper|stiff|durov|schoeller|radial.")
 app.add_typer(plot_app, name="plot")
 

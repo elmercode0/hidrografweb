@@ -1,6 +1,6 @@
-"""QualiGraf-Py — UI web (Streamlit).
+"""Hidrograf — UI web (Streamlit).
 
-Camada de interface fina sobre a biblioteca `qualigraf` (cálculos puros). Faz upload de
+Camada de interface fina sobre a biblioteca `hidrograf` (cálculos puros). Faz upload de
 uma planilha de amostras e mostra tabelas + diagramas hidroquímicos.
 
 Deploy: Streamlit Community Cloud (share.streamlit.io) → aponte para este arquivo.
@@ -16,7 +16,7 @@ import tempfile
 import zipfile
 from pathlib import Path
 
-# Permite importar `qualigraf` do src/ sem instalar o pacote (funciona no cloud e local).
+# Permite importar `hidrograf` do src/ sem instalar o pacote (funciona no cloud e local).
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 os.environ.setdefault("MPLBACKEND", "Agg")
 
@@ -24,18 +24,18 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import streamlit as st
 
-from qualigraf.balance import ionic_balance
-from qualigraf.diagrams import plot as make_plot
-from qualigraf.io import DataError, detect_ion_units, load
-from qualigraf.iqa import water_quality_index
-from qualigraf.irrigation import irrigation_classification
-from qualigraf.models import SampleSet, WaterSample
-from qualigraf.stats import basic_stats, correlate
-from qualigraf.tds import total_dissolved_solids
+from hidrograf.balance import ionic_balance
+from hidrograf.diagrams import plot as make_plot
+from hidrograf.io import DataError, detect_ion_units, load
+from hidrograf.iqa import water_quality_index
+from hidrograf.irrigation import irrigation_classification
+from hidrograf.models import SampleSet, WaterSample
+from hidrograf.stats import basic_stats, correlate
+from hidrograf.tds import total_dissolved_solids
 
 EXAMPLE = Path(__file__).parent / "tests" / "data" / "sample_waters.csv"
 
-st.set_page_config(page_title="QualiGraf-Py", page_icon="💧", layout="wide")
+st.set_page_config(page_title="Hidrograf", page_icon="💧", layout="wide")
 
 
 def _write_temp(data: bytes, name: str) -> str:
@@ -97,8 +97,8 @@ def _zip_all_diagrams(records: list[dict], labels: bool, dpi: int) -> bytes:
         for kind in DIAGRAM_KINDS:
             try:
                 png, svg = _render_diagram(records, kind, labels, dpi)
-                z.writestr(f"qualigraf_{kind}.png", png)
-                z.writestr(f"qualigraf_{kind}.svg", svg)
+                z.writestr(f"hidrograf_{kind}.png", png)
+                z.writestr(f"hidrograf_{kind}.svg", svg)
             except (ValueError, DataError):
                 continue
     return buf.getvalue()
@@ -117,7 +117,7 @@ def _footer() -> None:
 
 
 # ---------------------------------------------------------------------------- Sidebar
-st.sidebar.title("💧 QualiGraf-Py")
+st.sidebar.title("💧 Hidrograf")
 st.sidebar.caption(
     "Análise hidroquímica — reimplementação em Python dos módulos do QualiGraf (FUNCEME)."
 )
@@ -161,7 +161,7 @@ st.sidebar.markdown(
 )
 
 # ------------------------------------------------------------------------------- Main
-st.title("QualiGraf-Py")
+st.title("Hidrograf")
 if samples is None:
     st.info("Envie uma planilha na barra lateral ou ative **Usar dados de exemplo**.")
     _footer()
@@ -277,11 +277,11 @@ with tabs[7]:
         c2.image(png, use_container_width=True)
         d1, d2 = c2.columns(2)
         d1.download_button(
-            "⬇️ PNG (alta resolução)", png, file_name=f"qualigraf_{kind}.png",
+            "⬇️ PNG (alta resolução)", png, file_name=f"hidrograf_{kind}.png",
             mime="image/png", use_container_width=True, key=f"dl_png_{kind}",
         )
         d2.download_button(
-            "⬇️ SVG (vetorial)", svg, file_name=f"qualigraf_{kind}.svg",
+            "⬇️ SVG (vetorial)", svg, file_name=f"hidrograf_{kind}.svg",
             mime="image/svg+xml", use_container_width=True, key=f"dl_svg_{kind}",
         )
     except (ValueError, DataError) as e:
@@ -292,7 +292,7 @@ with tabs[7]:
         st.download_button(
             "📦 Baixar TODOS (ZIP: PNG + SVG)",
             _zip_all_diagrams(records, labels, dpi),
-            file_name="qualigraf_diagramas.zip", mime="application/zip",
+            file_name="hidrograf_diagramas.zip", mime="application/zip",
             key="dl_zip_all",
         )
         st.caption(f"Rótulos: {'sim' if labels else 'não'} · {dpi} DPI")
@@ -304,11 +304,11 @@ with tabs[7]:
             row = st.columns([2, 1, 1])
             row[0].markdown(f"**{k.capitalize()}**")
             row[1].download_button(
-                "PNG", p, file_name=f"qualigraf_{k}.png", mime="image/png",
+                "PNG", p, file_name=f"hidrograf_{k}.png", mime="image/png",
                 use_container_width=True, key=f"row_png_{k}",
             )
             row[2].download_button(
-                "SVG", s, file_name=f"qualigraf_{k}.svg", mime="image/svg+xml",
+                "SVG", s, file_name=f"hidrograf_{k}.svg", mime="image/svg+xml",
                 use_container_width=True, key=f"row_svg_{k}",
             )
 

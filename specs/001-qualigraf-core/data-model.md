@@ -1,4 +1,4 @@
-# Data Model — QualiGraf-Py
+# Data Model — Hidrograf
 
 ## WaterSample
 Uma amostra de água. Todos os campos de concentração opcionais (dados são incompletos).

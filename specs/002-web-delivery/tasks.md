@@ -7,7 +7,7 @@ marcados [x]; pendências reais marcadas [ ].
 
 ## Phase 1: App web (US1) — construído
 
-- [x] T201 [US1] `streamlit_app.py` importando `qualigraf` (src no path, matplotlib Agg)
+- [x] T201 [US1] `streamlit_app.py` importando `hidrograf` (src no path, matplotlib Agg)
 - [x] T202 [US1] Abas: Dados, Balanço, STD, SAR, IQA, Estatísticas, Correlação, Diagramas
 - [x] T203 [US1] Upload CSV/XLSX + dados de exemplo + tratamento de `DataError`
 - [x] T204 [US1] `requirements.txt`, `.streamlit/config.toml`, `DEPLOY.md`

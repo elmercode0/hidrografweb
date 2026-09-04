@@ -1,5 +1,5 @@
-from qualigraf.models import SampleSet, WaterSample
-from qualigraf.stats import basic_stats, correlate
+from hidrograf.models import SampleSet, WaterSample
+from hidrograf.stats import basic_stats, correlate
 
 
 def _set():
@@ -30,8 +30,8 @@ def test_correlation_perfect_linear():
 def test_correlation_log_requires_positive():
     import pytest
 
-    from qualigraf.io import DataError
-    from qualigraf.models import SampleSet, WaterSample
+    from hidrograf.io import DataError
+    from hidrograf.models import SampleSet, WaterSample
 
     ss = SampleSet([
         WaterSample(label="A", cl=0, na=10),  # cl=0 inválido para log
