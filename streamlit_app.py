@@ -9,15 +9,18 @@ Local:  `streamlit run streamlit_app.py`
 
 from __future__ import annotations
 
+import io
 import os
 import sys
 import tempfile
+import zipfile
 from pathlib import Path
 
 # Permite importar `qualigraf` do src/ sem instalar o pacote (funciona no cloud e local).
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 os.environ.setdefault("MPLBACKEND", "Agg")
 
+import matplotlib.pyplot as plt
 import pandas as pd
 import streamlit as st
 
@@ -57,6 +60,36 @@ def _df(rows: list[dict]) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+DIAGRAM_KINDS = ["piper", "stiff", "durov", "schoeller", "radial"]
+
+
+@st.cache_data(show_spinner=False)
+def _render_diagram(records: list[dict], kind: str, labels: bool, dpi: int) -> tuple[bytes, bytes]:
+    """Renderiza um diagrama para (PNG em alta resolução, SVG vetorial). Cacheável."""
+    ss = _to_sampleset(records)
+    fig = make_plot(kind, ss, labels=labels, title=None)
+    png, svg = io.BytesIO(), io.BytesIO()
+    fig.savefig(png, format="png", dpi=dpi, bbox_inches="tight")
+    fig.savefig(svg, format="svg", bbox_inches="tight")
+    plt.close(fig)  # evita acúmulo de figuras entre reruns
+    return png.getvalue(), svg.getvalue()
+
+
+@st.cache_data(show_spinner=False)
+def _zip_all_diagrams(records: list[dict], labels: bool, dpi: int) -> bytes:
+    """Empacota todos os diagramas (PNG + SVG) num único ZIP."""
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as z:
+        for kind in DIAGRAM_KINDS:
+            try:
+                png, svg = _render_diagram(records, kind, labels, dpi)
+                z.writestr(f"qualigraf_{kind}.png", png)
+                z.writestr(f"qualigraf_{kind}.svg", svg)
+            except (ValueError, DataError):
+                continue
+    return buf.getvalue()
+
+
 # ---------------------------------------------------------------------------- Sidebar
 st.sidebar.title("💧 QualiGraf-Py")
 st.sidebar.caption(
@@ -89,6 +122,7 @@ if samples is None:
     st.stop()
 
 st.success(f"{len(samples)} amostra(s) carregada(s).")
+records = [dict(s.__dict__) for s in samples]  # forma hashável p/ cache de diagramas
 
 tabs = st.tabs(
     ["📊 Dados", "⚖️ Balanço iônico", "🧂 STD/CONAMA", "🌱 Irrigação SAR/USSL",
@@ -179,11 +213,51 @@ with tabs[6]:
 with tabs[7]:
     st.subheader("Diagramas hidroquímicos")
     c1, c2 = st.columns([1, 3])
-    kind = c1.selectbox("Tipo", ["piper", "stiff", "durov", "schoeller", "radial"])
+    kind = c1.selectbox("Tipo", DIAGRAM_KINDS)
     labels = c1.checkbox("Rótulos", value=True)
+    dpi = c1.select_slider("Resolução (DPI)", options=[150, 200, 300, 600], value=300)
+    c1.caption(
+        "Passe o mouse sobre a imagem e clique no ícone ⛶ para **expandir em tela cheia**. "
+        "Stiff mostra até 6 amostras; Radial usa a primeira amostra."
+    )
+
     try:
-        fig = make_plot(kind, samples, labels=labels, title=None)
-        c2.pyplot(fig, use_container_width=True)
+        png, svg = _render_diagram(records, kind, labels, dpi)
+        # st.image mostra o botão de tela cheia ao passar o mouse (clicar → expande).
+        c2.image(png, use_container_width=True)
+        d1, d2 = c2.columns(2)
+        d1.download_button(
+            "⬇️ PNG (alta resolução)", png, file_name=f"qualigraf_{kind}.png",
+            mime="image/png", use_container_width=True, key=f"dl_png_{kind}",
+        )
+        d2.download_button(
+            "⬇️ SVG (vetorial)", svg, file_name=f"qualigraf_{kind}.svg",
+            mime="image/svg+xml", use_container_width=True, key=f"dl_svg_{kind}",
+        )
     except (ValueError, DataError) as e:
         c2.error(str(e))
-    c1.caption("Stiff mostra até 6 amostras; Radial usa a primeira amostra.")
+
+    st.markdown("---")
+    with st.expander("⬇️ Baixar cada diagrama separadamente"):
+        st.download_button(
+            "📦 Baixar TODOS (ZIP: PNG + SVG)",
+            _zip_all_diagrams(records, labels, dpi),
+            file_name="qualigraf_diagramas.zip", mime="application/zip",
+            key="dl_zip_all",
+        )
+        st.caption(f"Rótulos: {'sim' if labels else 'não'} · {dpi} DPI")
+        for k in DIAGRAM_KINDS:
+            try:
+                p, s = _render_diagram(records, k, labels, dpi)
+            except (ValueError, DataError):
+                continue
+            row = st.columns([2, 1, 1])
+            row[0].markdown(f"**{k.capitalize()}**")
+            row[1].download_button(
+                "PNG", p, file_name=f"qualigraf_{k}.png", mime="image/png",
+                use_container_width=True, key=f"row_png_{k}",
+            )
+            row[2].download_button(
+                "SVG", s, file_name=f"qualigraf_{k}.svg", mime="image/svg+xml",
+                use_container_width=True, key=f"row_svg_{k}",
+            )
