@@ -104,6 +104,18 @@ def _zip_all_diagrams(records: list[dict], labels: bool, dpi: int) -> bytes:
     return buf.getvalue()
 
 
+def _footer() -> None:
+    """Rodapé com crédito ao software e autor originais (fonte: scrapling/)."""
+    st.divider()
+    st.caption(
+        "Inspirado no **QualiGraf**, software de análise hidroquímica de **Gilberto Möbus** "
+        "(pesquisador em hidrogeologia da FUNCEME/CE), disponível em "
+        "[qualigraf.funceme.br](https://qualigraf.funceme.br/). Esta é uma reimplementação "
+        "independente em Python; créditos do software original à "
+        "[FUNCEME](http://www.funceme.br/)."
+    )
+
+
 # ---------------------------------------------------------------------------- Sidebar
 st.sidebar.title("💧 QualiGraf-Py")
 st.sidebar.caption(
@@ -152,6 +164,7 @@ st.sidebar.markdown(
 st.title("QualiGraf-Py")
 if samples is None:
     st.info("Envie uma planilha na barra lateral ou ative **Usar dados de exemplo**.")
+    _footer()
     st.stop()
 
 st.success(f"{len(samples)} amostra(s) carregada(s).")
@@ -298,3 +311,5 @@ with tabs[7]:
                 "SVG", s, file_name=f"qualigraf_{k}.svg", mime="image/svg+xml",
                 use_container_width=True, key=f"row_svg_{k}",
             )
+
+_footer()
