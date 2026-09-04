@@ -29,65 +29,155 @@ def _draw_triangle(ax, x0=0.0, y0=0.0, scale=1.0):
 
 # --- Piper ---------------------------------------------------------------------------
 
+# Layout clássico (base do triângulo = 1): cátions em x=0..1, ânions em x=2..3 e losango
+# centrado em cima do vão, com vértice inferior na altura do topo dos triângulos.
+_GAP = 1.0
+_ANION_X0 = 1.0 + _GAP
+_DIA_CX = (1.0 + _ANION_X0) / 2.0
+_DIA_CY = (1.0 + _GAP) * _H
+
+_GRID_KW = {"color": "0.78", "lw": 0.6, "zorder": 1}
+_EDGE_KW = {"color": "black", "lw": 1.8, "zorder": 4, "solid_joinstyle": "miter"}
+
+# Rótulos com mathtext em negrito, iguais aos usados na literatura.
+_L_CA = r"$\mathbf{Ca^{2+}}$"
+_L_MG = r"$\mathbf{Mg^{2+}}$"
+_L_NAK = r"$\mathbf{Na^{+}{+}K^{+}}$"
+_L_CL = r"$\mathbf{Cl^{-}}$"
+_L_SO4 = r"$\mathbf{SO_4^{2-}}$"
+_L_HCO3 = r"$\mathbf{HCO_3^{-}{+}CO_3^{2-}}$"
+_L_CAMG = r"$\mathbf{Ca^{2+}{+}Mg^{2+}}$"
+_L_SO4CL = r"$\mathbf{SO_4^{2-}{+}Cl^{-}}$"
+
+
+def _sample_colors(n: int) -> list:
+    """Uma cor por amostra (tab10 até 10 amostras, tab20 acima disso)."""
+    cmap = plt.get_cmap("tab10" if n <= 10 else "tab20")
+    k = 10 if n <= 10 else 20
+    return [cmap(i % k) for i in range(n)]
+
+
+def _tri_vertices(x0: float) -> tuple[tuple[float, float], ...]:
+    """(esquerdo, direito, topo) do triângulo equilátero com base [x0, x0+1]."""
+    return (x0, 0.0), (x0 + 1.0, 0.0), (x0 + 0.5, _H)
+
+
+def _tri_grid(ax, x0: float, steps: int = 10) -> None:
+    """Malha ternária a cada 10% — as três famílias de linhas paralelas aos lados."""
+    a, b, c = _tri_vertices(x0)
+    for i in range(1, steps):
+        f = i / steps
+        for p, q in (
+            ((a[0] + f * (c[0] - a[0]), a[1] + f * (c[1] - a[1])),
+             (b[0] + f * (c[0] - b[0]), b[1] + f * (c[1] - b[1]))),
+            ((a[0] + f * (b[0] - a[0]), a[1] + f * (b[1] - a[1])),
+             (a[0] + f * (c[0] - a[0]), a[1] + f * (c[1] - a[1]))),
+            ((b[0] + f * (a[0] - b[0]), b[1] + f * (a[1] - b[1])),
+             (b[0] + f * (c[0] - b[0]), b[1] + f * (c[1] - b[1]))),
+        ):
+            ax.plot([p[0], q[0]], [p[1], q[1]], **_GRID_KW)
+    ax.plot([a[0], b[0], c[0], a[0]], [a[1], b[1], c[1], a[1]], **_EDGE_KW)
+
+
+def _diamond_xy(u: float, v: float) -> tuple[float, float]:
+    """Ponto do losango a partir de u=%(Na+K) dos cátions e v=%(SO4+Cl) dos ânions.
+
+    Equivale à projeção clássica: sobe-se do ponto dos cátions a 60° e do ponto dos
+    ânions a 120° até a interseção.
+    """
+    return _DIA_CX + 0.5 * (u + v - 1.0), _DIA_CY + _H * (v - u)
+
+
+def _diamond_grid(ax, steps: int = 10) -> None:
+    for i in range(1, steps):
+        f = i / steps
+        for p, q in ((_diamond_xy(f, 0.0), _diamond_xy(f, 1.0)),
+                     (_diamond_xy(0.0, f), _diamond_xy(1.0, f))):
+            ax.plot([p[0], q[0]], [p[1], q[1]], **_GRID_KW)
+    corners = [_diamond_xy(0, 0), _diamond_xy(1, 0), _diamond_xy(1, 1), _diamond_xy(0, 1)]
+    corners.append(corners[0])
+    ax.plot([p[0] for p in corners], [p[1] for p in corners], **_EDGE_KW)
+
+
 def plot_piper(samples: SampleSet, labels: bool = False, title: str | None = None):
-    fig, ax = plt.subplots(figsize=(8, 7))
+    """Diagrama de Piper: triângulo de cátions, de ânions e losango de projeção.
+
+    Cátions: Ca (esq.), Na+K (dir.), Mg (topo). Ânions: HCO3+CO3 (esq.), Cl (dir.),
+    SO4 (topo). Cada amostra recebe uma cor única nos três painéis, ligada por linhas
+    de projeção pontilhadas.
+    """
+    fig, ax = plt.subplots(figsize=(10.5, 9.5))
     ax.set_aspect("equal")
     ax.axis("off")
 
-    gap = 0.25
-    # Triângulo de cátions (esquerda): Ca(esq), Na+K(dir), Mg(topo)
-    _draw_triangle(ax, 0, 0, 1)
-    # Triângulo de ânions (direita): Cl(esq), SO4... na base -> HCO3+CO3(dir), SO4(topo)
-    ax_off = 1 + gap
-    _draw_triangle(ax, ax_off, 0, 1)
-    # Losango central (topo)
-    cx = (1 + ax_off) / 2 + 0.0
-    dia_y = _H + gap
-    d = [(cx, dia_y), (cx + 0.5, dia_y + _H * 0.5),
-         (cx, dia_y + _H), (cx - 0.5, dia_y + _H * 0.5), (cx, dia_y)]
-    ax.plot([p[0] for p in d], [p[1] for p in d], color="black", lw=1)
+    _tri_grid(ax, 0.0)
+    _tri_grid(ax, _ANION_X0)
+    _diamond_grid(ax)
 
-    ax.text(0.5, -0.06, "Ca → Na+K", ha="center", fontsize=8)
-    ax.text(ax_off + 0.5, -0.06, "Cl → HCO3+CO3", ha="center", fontsize=8)
+    tk = {"fontsize": 13, "zorder": 6}
+    # Triângulo dos cátions
+    ax.text(-0.03, -0.075, _L_CA, ha="center", va="top", **tk)
+    ax.text(1.03, -0.075, _L_NAK, ha="center", va="top", **tk)
+    ax.text(0.5, _H + 0.05, _L_MG, ha="center", va="bottom", **tk)
+    # Triângulo dos ânions
+    ax.text(_ANION_X0 + 0.02, -0.075, _L_HCO3, ha="center", va="top", **tk)
+    ax.text(_ANION_X0 + 1.03, -0.075, _L_CL, ha="center", va="top", **tk)
+    ax.text(_ANION_X0 + 0.5, _H + 0.05, _L_SO4, ha="center", va="bottom", **tk)
+    # Losango
+    ax.text(_DIA_CX, _DIA_CY + _H + 0.06, _L_SO4CL, ha="center", va="bottom", **tk)
+    ax.text(_DIA_CX, _DIA_CY - _H - 0.08, _L_NAK, ha="center", va="top", **tk)
+    off = 0.14  # afastamento perpendicular aos lados superiores do losango
+    ax.text(_DIA_CX - 0.25 - off * _H, _DIA_CY + _H / 2 + off * 0.5, _L_CAMG,
+            ha="center", va="center", rotation=60, **tk)
+    ax.text(_DIA_CX + 0.25 + off * _H, _DIA_CY + _H / 2 + off * 0.5, _L_HCO3,
+            ha="center", va="center", rotation=-60, **tk)
 
-    cxs, cys, axs, ays, dxs, dys, labs = [], [], [], [], [], [], []
+    colors = _sample_colors(len(samples))
+    handles, plotted = [], []
     for i, s in enumerate(samples):
         ca = s.meq("ca") or 0.0
         mg = s.meq("mg") or 0.0
-        na = (s.meq("na") or 0.0) + (s.meq("k") or 0.0)
+        nak = (s.meq("na") or 0.0) + (s.meq("k") or 0.0)
         cl = s.meq("cl") or 0.0
         so4 = s.meq("so4") or 0.0
         hco3 = (s.meq("hco3") or 0.0) + (s.meq("co3") or 0.0)
+        tot_c, tot_a = ca + mg + nak, cl + so4 + hco3
+        color = colors[i]
 
-        if (ca + mg + na) > 0:
-            # a=Ca(esq), b=Na+K(dir), c=Mg(topo)
-            xc, yc = ternary_to_xy(ca, na, mg)
-            cxs.append(xc); cys.append(yc)
-        if (cl + so4 + hco3) > 0:
-            # a=Cl(esq), b=HCO3+CO3(dir), c=SO4(topo)
-            xa, ya = ternary_to_xy(cl, hco3, so4)
-            axs.append(ax_off + xa); ays.append(ya)
-        # Projeção no losango: usa %Na+K (cátions) e %SO4+Cl (ânions) — projeção padrão
-        tot_c = ca + mg + na
-        tot_a = cl + so4 + hco3
+        pts = []
+        if tot_c > 0:
+            # a=Ca (esq.), b=Na+K (dir.), c=Mg (topo)
+            pts.append(ternary_to_xy(ca, nak, mg))
+        if tot_a > 0:
+            # a=HCO3+CO3 (esq.), b=Cl (dir.), c=SO4 (topo)
+            xa, ya = ternary_to_xy(hco3, cl, so4)
+            pts.append((_ANION_X0 + xa, ya))
         if tot_c > 0 and tot_a > 0:
-            px = 100 * na / tot_c   # % álcalis
-            py = 100 * (so4 + cl) / tot_a  # % ácidos fortes
-            # mapeia (px,py) no losango (0..100 -> geometria)
-            u = px / 100.0
-            v = py / 100.0
-            dx = cx + (u - v) * 0.5
-            dy = dia_y + (u + v) * _H * 0.5
-            dxs.append(dx); dys.append(dy)
-        labs.append(s.label)
+            dp = _diamond_xy(nak / tot_c, (so4 + cl) / tot_a)
+            for p in pts:  # linhas de projeção até o losango
+                ax.plot([p[0], dp[0]], [p[1], dp[1]], ls=":", lw=0.8,
+                        color=color, alpha=0.55, zorder=2)
+            pts.append(dp)
+            plotted.append((dp, s.label))
+        for x, y in pts:
+            ax.scatter([x], [y], s=110, color=color, edgecolors="black",
+                       linewidths=1.0, zorder=5)
+        if pts:
+            handles.append(plt.Line2D([], [], marker="o", ls="", markersize=10,
+                                      markerfacecolor=color, markeredgecolor="black",
+                                      markeredgewidth=1.0, label=str(s.label)))
 
-    ax.scatter(cxs, cys, color=_COLORS[0], s=30, zorder=3)
-    ax.scatter(axs, ays, color=_COLORS[1], s=30, zorder=3)
-    ax.scatter(dxs, dys, color=_COLORS[2], s=30, zorder=3)
     if labels:
-        _label_points(ax, dxs, dys, labs[: len(dxs)])
+        _label_points(ax, [p[0][0] for p in plotted], [p[0][1] for p in plotted],
+                      [p[1] for p in plotted])
+    if handles and len(handles) <= 14:
+        ax.legend(handles=handles, title="Amostras", loc="upper right",
+                  bbox_to_anchor=(1.0, 1.0), frameon=True, fontsize=11,
+                  title_fontsize=12, labelspacing=0.6, borderpad=0.8)
 
-    ax.set_title(title or "Diagrama de Piper")
+    ax.set_xlim(-0.30, 3.30)
+    ax.set_ylim(-0.30, _DIA_CY + _H + 0.45)
+    ax.set_title(title or "Diagrama de Piper", fontsize=18, fontweight="bold", pad=14)
     fig.tight_layout()
     return fig
 
