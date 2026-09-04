@@ -42,7 +42,7 @@ DBO_DISCREPANCY = {
     "observed": 15.0,
     "qi_curva_desenhada": 22.0,
     "qi_equacao_cetesb": 20.0,   # 102.6*exp(-0.1101*15)
-    "qi_exemplo_qualigraf": 67.57,
+    "qi_exemplo_hidrograf": 67.57,
     "status": "resolvido",
     "conclusao": "curva (~20-22) correta; 67,57 é bug de exibição do QualiGraf",
     "fonte": "BasIQA/ABRHidro 2013 (reconstrução das curvas CETESB 2005)",

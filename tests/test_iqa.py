@@ -1,9 +1,9 @@
 import pytest
 
-from qualigraf.io import DataError
-from qualigraf.iqa import iqa_sample
-from qualigraf.iqa_curves import ANCHOR_POINTS, DBO_DISCREPANCY, qi
-from qualigraf.models import WaterSample
+from hidrograf.io import DataError
+from hidrograf.iqa import iqa_sample
+from hidrograf.iqa_curves import ANCHOR_POINTS, DBO_DISCREPANCY, qi
+from hidrograf.models import WaterSample
 
 _FULL = {
     "do_sat": 90, "coliforms": 50, "ph": 7.0, "bod": 2, "temp_var": 1,
@@ -11,7 +11,7 @@ _FULL = {
 }
 
 
-def test_qi_matches_qualigraf_anchor_points():
+def test_qi_matches_hidrograf_anchor_points():
     """8 dos 9 pontos-âncora do exemplo do QualiGraf conferem com as curvas digitalizadas.
 
     DBO é a exceção documentada (DBO_DISCREPANCY): a curva desenhada dá ~22 em DBO=15,
@@ -29,7 +29,7 @@ def test_qi_matches_qualigraf_anchor_points():
 def test_dbo_discrepancy_is_documented():
     # A curva desenhada (usada) diverge do exemplo do software — registrado, não escondido.
     assert abs(qi("bod", 15.0) - DBO_DISCREPANCY["qi_curva_desenhada"]) <= 4
-    assert DBO_DISCREPANCY["qi_exemplo_qualigraf"] == 67.57
+    assert DBO_DISCREPANCY["qi_exemplo_hidrograf"] == 67.57
 
 
 def test_iqa_good_water_high_index():
@@ -57,8 +57,8 @@ def test_iqa_poor_water_low_index():
 
 def test_iqa_classes_exact_boundaries():
     # Faixas exatas do QualiGraf: CETESB 20/37/52/80; IGAM 25/50/70/90.
-    from qualigraf.constants import IQA_RANGES_CETESB, IQA_RANGES_IGAM
-    from qualigraf.iqa import _classify
+    from hidrograf.constants import IQA_RANGES_CETESB, IQA_RANGES_IGAM
+    from hidrograf.iqa import _classify
 
     assert _classify(80, IQA_RANGES_CETESB) == "Ótimo"
     assert _classify(52, IQA_RANGES_CETESB) == "Bom"

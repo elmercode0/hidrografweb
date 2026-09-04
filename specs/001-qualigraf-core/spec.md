@@ -1,4 +1,4 @@
-# Feature Specification: QualiGraf-Py — Núcleo de Análise Hidroquímica
+# Feature Specification: Hidrograf — Núcleo de Análise Hidroquímica
 
 **Feature Branch**: `001-qualigraf-core`
 
@@ -29,7 +29,7 @@ validar a qualidade da análise laboratorial.
 **Why this priority**: É a verificação fundamental de consistência de qualquer análise
 hidroquímica; sem ela as demais análises não são confiáveis. Sozinha já entrega valor.
 
-**Independent Test**: Rodar `qualigraf balance amostras.csv` e conferir Ep% contra um
+**Independent Test**: Rodar `hidrograf balance amostras.csv` e conferir Ep% contra um
 caso calculado à mão.
 
 **Acceptance Scenarios**:
@@ -52,7 +52,7 @@ classifica as águas em Doces/Salobras/Salgadas conforme a Resolução CONAMA 35
 **Why this priority**: Cálculo simples, de alto uso, e base para outras análises
 (Durov usa STD). MVP independente.
 
-**Independent Test**: `qualigraf tds amostras.csv` e conferir classe por faixa de STD.
+**Independent Test**: `hidrograf tds amostras.csv` e conferir classe por faixa de STD.
 
 **Acceptance Scenarios**:
 
@@ -70,7 +70,7 @@ amostra (combinação risco de salinidade C1–C4 × risco de sódio S1–S4).
 
 **Why this priority**: Uso agronômico central do QualiGraf; depende de meq/L (US1).
 
-**Independent Test**: `qualigraf sar amostras.csv` conferindo SAR e rótulo (ex.: C3S1).
+**Independent Test**: `hidrograf sar amostras.csv` conferindo SAR e rótulo (ex.: C3S1).
 
 **Acceptance Scenarios**:
 
@@ -87,7 +87,7 @@ recebe a classificação nas faixas CETESB e IGAM.
 **Why this priority**: Índice muito solicitado; mais complexo (curvas qi). Independente
 das demais.
 
-**Independent Test**: `qualigraf iqa amostras.csv` conferindo IQA contra caso de
+**Independent Test**: `hidrograf iqa amostras.csv` conferindo IQA contra caso de
 referência; erro claro se faltar algum dos 9 parâmetros.
 
 **Acceptance Scenarios**:
@@ -108,7 +108,7 @@ arquivos de imagem, com opção de rotular/selecionar amostras.
 
 **Why this priority**: É a razão de ser gráfica do QualiGraf. Depende de meq/L (US1).
 
-**Independent Test**: `qualigraf plot piper amostras.csv -o piper.png` gera a imagem e
+**Independent Test**: `hidrograf plot piper amostras.csv -o piper.png` gera a imagem e
 posiciona os pontos corretamente para uma amostra conhecida.
 
 **Acceptance Scenarios**:
@@ -128,7 +128,7 @@ desvio-padrão) e ajusta correlações entre íons por mínimos quadrados, com R
 
 **Why this priority**: Inspeção exploratória; complementar. Independente.
 
-**Independent Test**: `qualigraf stats amostras.csv` e `qualigraf correlate amostras.csv
+**Independent Test**: `hidrograf stats amostras.csv` e `hidrograf correlate amostras.csv
 --x Cl --y Na` conferindo média/R² à mão.
 
 **Acceptance Scenarios**:
@@ -200,7 +200,7 @@ desvio-padrão) e ajusta correlações entre íons por mínimos quadrados, com R
   mão em menos de 0,1 ponto percentual.
 - **SC-002**: A classe CONAMA, a classe USSL e as faixas IQA/CETESB/IGAM de casos de
   referência batem 100% com a classificação esperada.
-- **SC-003**: `qualigraf plot piper|stiff|durov|schoeller|radial` produz um arquivo de
+- **SC-003**: `hidrograf plot piper|stiff|durov|schoeller|radial` produz um arquivo de
   imagem não vazio para uma planilha de exemplo, em < 5 s por diagrama.
 - **SC-004**: Um novo usuário processa uma planilha de exemplo do início ao fim seguindo
   o `quickstart.md` sem editar código.

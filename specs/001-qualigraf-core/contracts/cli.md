@@ -1,6 +1,6 @@
-# CLI Contract — `qualigraf`
+# CLI Contract — `hidrograf`
 
-Convenção geral: `qualigraf <comando> <ARQUIVO> [opções]`. Toda saída tabular aceita
+Convenção geral: `hidrograf <comando> <ARQUIVO> [opções]`. Toda saída tabular aceita
 `--json` (machine-readable em stdout). Erros → stderr, exit code ≠ 0. `--output/-o` grava
 resultado em arquivo (.txt/.csv para tabelas; .png/.svg para diagramas).
 
@@ -18,12 +18,12 @@ resultado em arquivo (.txt/.csv para tabelas; .png/.svg para diagramas).
 Exemplos:
 
 ```bash
-qualigraf balance tests/data/sample_waters.csv --method both
-qualigraf tds amostras.csv --factor 0.7 --json
-qualigraf sar amostras.csv -o sar.csv
-qualigraf iqa amostras.csv --json
-qualigraf plot piper amostras.csv -o piper.png --labels
-qualigraf correlate amostras.csv --x Cl --y Na --model linear
+hidrograf balance tests/data/sample_waters.csv --method both
+hidrograf tds amostras.csv --factor 0.7 --json
+hidrograf sar amostras.csv -o sar.csv
+hidrograf iqa amostras.csv --json
+hidrograf plot piper amostras.csv -o piper.png --labels
+hidrograf correlate amostras.csv --x Cl --y Na --model linear
 ```
 
 Contrato de erro (exemplos):

@@ -1,4 +1,4 @@
-from qualigraf.chemistry import to_meq, to_mg
+from hidrograf.chemistry import to_meq, to_mg
 
 
 def test_calcium_mg_to_meq():
@@ -18,7 +18,7 @@ def test_unknown_ion():
 
 
 def test_do_saturation():
-    from qualigraf.chemistry import do_saturation_mgl, do_saturation_pct
+    from hidrograf.chemistry import do_saturation_mgl, do_saturation_pct
 
     # Saturação ~9.08 mg/L a 20 °C ao nível do mar (APHA).
     assert abs(do_saturation_mgl(20.0) - 9.08) < 0.15

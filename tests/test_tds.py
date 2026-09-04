@@ -1,8 +1,8 @@
 import pytest
 
-from qualigraf.io import DataError
-from qualigraf.models import WaterSample
-from qualigraf.tds import classify_tds, tds_sample
+from hidrograf.io import DataError
+from hidrograf.models import WaterSample
+from hidrograf.tds import classify_tds, tds_sample
 
 
 def test_estimate_from_ec():

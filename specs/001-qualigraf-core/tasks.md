@@ -1,4 +1,4 @@
-# Tasks: QualiGraf-Py — Núcleo de Análise Hidroquímica
+# Tasks: Hidrograf — Núcleo de Análise Hidroquímica
 
 **Input**: Design em `/specs/001-qualigraf-core/` (plan, spec, research, data-model, contracts)
 

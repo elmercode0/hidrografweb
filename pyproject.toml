@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "qualigraf"
+name = "hidrograf"
 version = "0.1.0"
 description = "Reimplementação em Python dos módulos de análise hidroquímica do QualiGraf (FUNCEME)"
 readme = "README.md"
@@ -23,10 +23,10 @@ dev = ["pytest>=8.0", "ruff>=0.5"]
 web = ["streamlit>=1.36"]
 
 [project.scripts]
-qualigraf = "qualigraf.cli:app"
+hidrograf = "hidrograf.cli:app"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/qualigraf"]
+packages = ["src/hidrograf"]
 
 [tool.ruff]
 line-length = 100
@@ -34,7 +34,7 @@ src = ["src", "tests"]
 
 [tool.ruff.lint.per-file-ignores]
 # typer usa `Option(...)`/`Argument(...)` como defaults de função — idioma da lib.
-"src/qualigraf/cli.py" = ["B008"]
+"src/hidrograf/cli.py" = ["B008"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

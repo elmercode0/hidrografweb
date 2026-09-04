@@ -1,16 +1,16 @@
-# QualiGraf-Py Constitution
+# Hidrograf Constitution
 
 ## Core Principles
 
 ### I. Library-First, Domain-Pure
 Every hydrochemistry capability is implemented first as a pure, standalone function
-or class in the `qualigraf` library, free of I/O and UI concerns. Calculations
+or class in the `hidrograf` library, free of I/O and UI concerns. Calculations
 (ionic balance, IQA, TDS, SAR, diagrams data) take plain numeric inputs and return
 plain data structures. No calculation module may import the CLI, read files, or print.
 This guarantees each analysis is independently testable and embeddable.
 
 ### II. CLI Interface
-Every user-facing capability is reachable through the `qualigraf` CLI. The CLI follows
+Every user-facing capability is reachable through the `hidrograf` CLI. The CLI follows
 a text in/out protocol: file/args in → results to stdout, errors to stderr. Every
 command supports both a human-readable table view and a `--json` machine-readable
 output. Plotting commands write image files and print their paths.
@@ -40,7 +40,7 @@ samples — dropped/invalid samples are reported.
 - CLI: `typer`. Packaging: `pyproject.toml` (PEP 621), `src/` layout.
 - The library core requires no network at runtime (offline-capable, like the original).
 - **Web delivery (added v1.1.0):** a thin Streamlit UI (`streamlit_app.py`) is a supported
-  delivery target, deployed on Streamlit Community Cloud. It MUST only import `qualigraf`
+  delivery target, deployed on Streamlit Community Cloud. It MUST only import `hidrograf`
   and contain no calculation logic (Principle I). Earlier "GUI/web out of scope" is
   superseded; see `specs/002-web-delivery/`.
 - Inputs: CSV/XLSX of water samples; ion concentrations in mg/L **or** meq/L (unit
@@ -65,7 +65,7 @@ samples — dropped/invalid samples are reported.
 ## Governance
 
 This constitution guides all spec, plan, task, and implementation decisions for
-QualiGraf-Py. Any deviation (extra dependency, skipped test, magic constant, out-of-flow
+Hidrograf. Any deviation (extra dependency, skipped test, magic constant, out-of-flow
 change) must be justified in the plan's Complexity Tracking table. Simplicity and
 scientific fidelity win ties.
 

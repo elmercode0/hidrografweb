@@ -1,10 +1,10 @@
-from qualigraf.balance import (
+from hidrograf.balance import (
     balance_sample,
     practical_error,
     tolerance_ce,
     tolerance_sum,
 )
-from qualigraf.models import WaterSample
+from hidrograf.models import WaterSample
 
 
 def test_ep_custodio_llamas_formula():

@@ -4,7 +4,7 @@
 
 ## Summary
 
-Camada de entrega sobre a biblioteca `qualigraf` (spec 001): app Streamlit publicado no
+Camada de entrega sobre a biblioteca `hidrograf` (spec 001): app Streamlit publicado no
 Streamlit Cloud, upload com detecção/escolha de unidade (mg/L, meq/L) normalizando para
 mg/L, e diagramas expansíveis com download (PNG/SVG/ZIP). Inclui a disciplina de deploy
 (feature branch → PR → merge na `main` = produção). Documento de reconciliação: a maior
@@ -13,7 +13,7 @@ parte já foi construída; o plano registra a arquitetura e o débito remanescen
 ## Technical Context
 
 **Language/Version**: Python 3.11+
-**Primary Dependencies**: streamlit, matplotlib, pandas, numpy, openpyxl (via `qualigraf`)
+**Primary Dependencies**: streamlit, matplotlib, pandas, numpy, openpyxl (via `hidrograf`)
 **Storage**: sem estado; uploads processados em memória / `/tmp` efêmero
 **Testing**: pytest (glue da web — pendente, FR-207)
 **Target Platform**: Streamlit Community Cloud (navegador)
@@ -27,7 +27,7 @@ adicionados os princípios de **Entrega/Deploy** (spec-first, branch+PR).
 
 | Princípio | Conformidade |
 |-----------|--------------|
-| I. Library-First, Domain-Pure | ✅ a UI só importa `qualigraf`; zero cálculo na UI |
+| I. Library-First, Domain-Pure | ✅ a UI só importa `hidrograf`; zero cálculo na UI |
 | II. CLI Interface | ✅ mantida; `--unit` adicionado |
 | III. Test-First numérico | 🟡 cálculos testados; **glue da web sem testes** (FR-207) |
 | IV. Traceabilidade científica | ✅ inalterada |
@@ -37,13 +37,13 @@ adicionados os princípios de **Entrega/Deploy** (spec-first, branch+PR).
 ## Project Structure
 
 ```text
-streamlit_app.py            # UI (importa qualigraf)
+streamlit_app.py            # UI (importa hidrograf)
 requirements.txt            # deps do app (Streamlit Cloud)
 .streamlit/config.toml      # tema/headless
 DEPLOY.md                   # como publicar
 CONTRIBUTING.md             # fluxo spec-first + branch/PR (novo)
-src/qualigraf/io.py         # detect_ion_units + load(default_unit)
-src/qualigraf/cli.py        # --unit em balance/sar/convert
+src/hidrograf/io.py         # detect_ion_units + load(default_unit)
+src/hidrograf/cli.py        # --unit em balance/sar/convert
 tests/test_io.py            # testes de unidade (mg/meq)
 tests/test_web.py           # glue da web (PENDENTE, FR-207)
 ```

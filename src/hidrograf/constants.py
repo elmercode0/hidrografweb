@@ -1,4 +1,4 @@
-"""Constantes científicas do QualiGraf-Py.
+"""Constantes científicas do Hidrograf.
 
 Todas as constantes citam sua fonte. Valores são overridáveis pelos módulos de
 cálculo (parâmetros de função), conforme o QualiGraf original permite alterar os

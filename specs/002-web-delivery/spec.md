@@ -30,7 +30,7 @@ estatísticas, correlação e diagramas — sem instalar nada.
 
 **Acceptance Scenarios**:
 1. **Given** uma planilha CSV/XLSX, **When** faço upload, **Then** cada aba mostra a
-   respectiva análise usando a biblioteca `qualigraf`.
+   respectiva análise usando a biblioteca `hidrograf`.
 2. **Given** dados inválidos, **When** carrego, **Then** vejo erro claro (Princípio V).
 
 ---
@@ -114,4 +114,4 @@ Reutiliza as da spec 001. Adiciona apenas artefatos de entrega: `streamlit_app.p
 
 ## Assumptions
 - Streamlit Community Cloud como plataforma; `main` é a branch de produção.
-- A biblioteca `qualigraf` (spec 001) é a fonte única dos cálculos; a UI não os reimplementa.
+- A biblioteca `hidrograf` (spec 001) é a fonte única dos cálculos; a UI não os reimplementa.

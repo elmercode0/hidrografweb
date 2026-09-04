@@ -1,6 +1,6 @@
 import math
 
-from qualigraf.geometry import normalize3, ternary_to_xy
+from hidrograf.geometry import normalize3, ternary_to_xy
 
 _H = math.sqrt(3) / 2.0
 
