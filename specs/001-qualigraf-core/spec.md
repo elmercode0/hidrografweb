@@ -211,9 +211,10 @@ desvio-padrão) e ajusta correlações entre íons por mínimos quadrados, com R
 - Concentrações de entrada em mg/L, CE em µS/cm. **Não há conversão automática de unidade
   em v1**; fornecer CE em dS/m ou mS/cm produziria STD/USSL 1000× errados — exigência de
   µS/cm documentada no quickstart/README.
-- Escopo v1: análises, classificações, tabelas e diagramas estáticos (PNG/SVG). Fora do
-  escopo v1: GUI desktop, acesso a Google Maps, integração com editores/planilhas e
-  impressão direta (itens "Miscelânea" do original).
+- Escopo desta spec (001): análises, classificações, tabelas e diagramas estáticos
+  (PNG/SVG) como biblioteca + CLI. **Nota (atualizada):** a camada **web** foi movida para
+  a spec `002-web-delivery` (deixou de ser "fora de escopo"). Continuam fora do escopo:
+  GUI desktop, Google Maps, integração com editores/planilhas e impressão direta.
 - Reproduzimos os cálculos e a semântica dos módulos, não o layout visual pixel-a-pixel
   dos gráficos do software original.
 
