@@ -177,7 +177,9 @@ except DataError as e:
 
 st.sidebar.markdown("---")
 st.sidebar.markdown(
-    "**Unidades:** íons em mg/L · CE em µS/cm.\n\n"
+    "**Unidades:** íons em mg/L ou meq/L · CE em µS/cm.\n\n"
+    "Para **meq/L**: escolha no seletor ao enviar (vale p/ toda a planilha) ou anote a "
+    "unidade no cabeçalho da coluna, ex.: `Na (meq/L)` — o cabeçalho tem precedência.\n\n"
     "Colunas reconhecidas por apelido (ex.: `Na`, `Sodio`, `Na+`)."
 )
 
