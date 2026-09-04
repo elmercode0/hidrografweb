@@ -104,6 +104,14 @@ def _zip_all_diagrams(records: list[dict], labels: bool, dpi: int) -> bytes:
     return buf.getvalue()
 
 
+@st.cache_data(show_spinner=False)
+def _template_xlsx() -> bytes:
+    """Planilha-modelo em .xlsx (mesmos dados/colunas do exemplo) para download."""
+    buf = io.BytesIO()
+    pd.read_csv(EXAMPLE).to_excel(buf, index=False, sheet_name="amostras")
+    return buf.getvalue()
+
+
 def _footer() -> None:
     """Rodapé com crédito ao software e autor originais (fonte: scrapling/)."""
     st.divider()
@@ -123,6 +131,19 @@ st.sidebar.caption(
 )
 
 up = st.sidebar.file_uploader("Planilha de amostras (CSV/XLSX)", type=["csv", "xlsx"])
+
+st.sidebar.caption("Não tem uma planilha? Baixe o modelo, preencha e envie no campo acima.")
+_dl_csv, _dl_xlsx = st.sidebar.columns(2)
+_dl_csv.download_button(
+    "⬇️ Modelo CSV", data=EXAMPLE.read_bytes(), file_name="hidrograf_modelo.csv",
+    mime="text/csv", use_container_width=True,
+)
+_dl_xlsx.download_button(
+    "⬇️ Modelo Excel", data=_template_xlsx(), file_name="hidrograf_modelo.xlsx",
+    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    use_container_width=True,
+)
+
 use_example = st.sidebar.toggle("Usar dados de exemplo", value=up is None)
 
 samples: SampleSet | None = None
