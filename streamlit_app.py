@@ -138,13 +138,9 @@ def page_analise() -> None:
     up = st.sidebar.file_uploader("Planilha de amostras (CSV/XLSX)", type=["csv", "xlsx"])
 
     st.sidebar.caption("Não tem uma planilha? Baixe o modelo, preencha e envie no campo acima.")
-    _dl_csv, _dl_xlsx = st.sidebar.columns(2)
-    _dl_csv.download_button(
-        "⬇️ Modelo CSV", data=EXAMPLE.read_bytes(), file_name="hidrograf_modelo.csv",
-        mime="text/csv", use_container_width=True,
-    )
-    _dl_xlsx.download_button(
-        "⬇️ Modelo Excel", data=_template_xlsx(), file_name="hidrograf_modelo.xlsx",
+    st.sidebar.download_button(
+        "⬇️ Baixar planilha-modelo (Excel)", data=_template_xlsx(),
+        file_name="hidrograf_modelo.xlsx",
         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         use_container_width=True,
     )
